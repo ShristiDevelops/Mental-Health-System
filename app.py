@@ -15,7 +15,7 @@ bcrypt = Bcrypt(app)
 # ==============================
 
 openai_client = OpenAI(
-    api_key="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",
+    api_key="api_key_here",
     base_url="https://openrouter.ai/api/v1"
 )
 
