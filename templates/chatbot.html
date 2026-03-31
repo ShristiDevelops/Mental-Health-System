@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Mental Health Chatbot</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Internal styling -->
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden; /* Prevent scrollbars */
+            color: white;
+        }
+
+        h2 {
+            z-index: 1; /* Keep above particles */
+        }
+
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            z-index: 1; /* Keep above particles */
+        }
+
+        .chatbox {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .input-area button {
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: hotpink;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Particle background container */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <h2>🤖 AI Mental Health Assistant</h2>
+
+    <div class="chat-container">
+        <div id="chatbox" class="chatbox"></div>
+
+        <div class="input-area">
+            <input type="text"
+                   id="userInput"
+                   placeholder="Type a message..."
+                   onkeypress="if(event.key==='Enter'){ sendMessage(); }">
+            <button type="button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
+
+    <!-- Load particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.7, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": false },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "random": true,
+                    "out_mode": "out"
+                }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" }
+                },
+                "modes": {
+                    "repulse": { "distance": 100 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+    <script>
+async function sendMessage() {
+    const inputField = document.getElementById("userInput");
+    const chatbox = document.getElementById("chatbox");
+
+    let userMessage = inputField.value.trim();
+    if (userMessage === "") return;
+
+    // Get latest journal entry
+    let recentJournal = localStorage.getItem("recentJournal") || "No recent journal entry found.";
+
+    // Simple emotion detection
+    let emotionalState = "Neutral";
+    if (recentJournal.toLowerCase().includes("tired")) emotionalState = "I am Tired";
+    if (recentJournal.toLowerCase().includes("sad")) emotionalState = "I am Sad";
+    if (recentJournal.toLowerCase().includes("anxious")) emotionalState = "I am Anxious";
+
+    let formattedPrompt = `
+User Emotional State: ${emotionalState}
+Recent Journal Entry: ${recentJournal}
+Current User Message: ${userMessage}
+
+Respond warmly and empathetically.
+`;
+
+    // Show user message
+    chatbox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+    inputField.value = "";
+
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: formattedPrompt })
+        });
+
+        const data = await response.json();
+
+        chatbox.innerHTML += `<p><strong>AI:</strong> ${data.reply}</p>`;
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+    } catch (error) {
+        chatbox.innerHTML += `<p><strong>AI:</strong> Server error.</p>`;
+    }
+}
+</script>
+</body>
+</html>

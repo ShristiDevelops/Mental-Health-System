@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - AI Mental Health System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            z-index: 2;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            z-index: 1;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1;
+        }
+
+        input {
+            padding: 12px;
+            width: 250px;
+            border-radius: 6px;
+            border: none;
+            outline: none;
+        }
+
+        .big-box {
+            padding: 12px 25px;
+            background-color: black;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .big-box:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .switch-link {
+            margin-top: 15px;
+            z-index: 1;
+        }
+
+        .switch-link a {
+            color: white;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<img src="{{ url_for('static', filename='logo.png') }}" class="logo">
+
+<h1>Create Account</h1>
+
+<form method="POST" class="form-container">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit" class="big-box">Sign Up</button>
+</form>
+
+<div class="switch-link">
+    Already have an account?
+    <a href="/login">Login</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+    "particles": {
+        "number": {"value": 80,"density": {"enable": true,"value_area": 800}},
+        "color": {"value": "#ffffff"},
+        "shape": {"type": "circle"},
+        "opacity": {"value": 0.7,"random": true},
+        "size": {"value": 4,"random": true},
+        "line_linked": {"enable": false},
+        "move": {"enable": true,"speed": 2,"random": true,"out_mode": "out"}
+    },
+    "interactivity": {
+        "events": {
+            "onhover": {"enable": true,"mode": "repulse"},
+            "onclick": {"enable": true,"mode": "push"}
+        },
+        "modes": {
+            "repulse": {"distance": 100},
+            "push": {"particles_nb": 4}
+        }
+    },
+    "retina_detect": true
+});
+</script>
+
+</body>
+</html>

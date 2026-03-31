@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Journal</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: Arial;
+            overflow: hidden; /* Prevent scrollbars */
+            color: white;
+
+            /* Animated gradient background for consistency */
+            background-color: black;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            z-index: 1;
+        }
+
+        .journal-box {
+            background: rgba(31, 10, 28, 0.9); /* semi-transparent dark aesthetic */
+            width: 400px;
+            height: 400px; /* fixed height so we can center content */
+            margin: auto;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* centers vertically */
+            align-items: center;     /* centers horizontally */
+            z-index: 1;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .entry {
+            text-align: left;
+            background: #6b344f;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        #entries {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        /* Particle background container */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <h1>My Journal</h1>
+
+    <div class="journal-box">
+        <textarea id="note" placeholder="Write your thoughts..."></textarea>
+        <button onclick="saveNote()">Save</button>
+        <div id="entries"></div>
+    </div>
+
+    <script>
+function saveNote() {
+    let note = document.getElementById("note").value;
+    if(note.trim() === "") return;
+
+    let time = new Date().toLocaleString();
+    let entry = { text: note, date: time };
+
+    let saved = JSON.parse(localStorage.getItem("journalList")) || [];
+    saved.push(entry);
+    localStorage.setItem("journalList", JSON.stringify(saved));
+
+    // ✅ Store latest journal separately for chatbot
+    localStorage.setItem("recentJournal", note);
+
+    document.getElementById("note").value = "";
+    loadEntries();
+}
+
+    function loadEntries() {
+        let entriesDiv = document.getElementById("entries");
+        entriesDiv.innerHTML = "";
+
+        let saved = JSON.parse(localStorage.getItem("journalList")) || [];
+        saved.forEach(item => {
+            entriesDiv.innerHTML += `
+                <div class="entry">
+                    <small>${item.date}</small>
+                    <p>${item.text}</p>
+                </div>
+            `;
+        });
+    }
+
+    window.onload = loadEntries;
+    </script>
+
+    <!-- Load particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ffffff", "#ff69b4", "#87cefa", "#dda0dd"] }, /* pastel sparkles */
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.7, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": false },
+                "move": { "enable": true, "speed": 2, "random": true, "out_mode": "out" }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" }
+                },
+                "modes": {
+                    "repulse": { "distance": 100 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>

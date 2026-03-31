@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smile Camera</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden; /* Prevent scrollbars */
+            color: white;
+        }
+
+        .phone {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1; /* Keep above particles */
+        }
+
+        .camera-wrapper {
+            margin: 20px 0;
+        }
+
+        .camera-feed {
+            width: 300px;
+            height: 400px;
+            border-radius: 10px;
+            background: black;
+        }
+
+        .shutter, .download {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Particle background container */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle background -->
+    <div id="particles-js"></div>
+
+    <div class="phone">
+        <h2 style="color: black">Smile Detector 😊</h2>
+
+        <div class="camera-wrapper">
+            <video id="video" class="camera-feed" autoplay></video>
+        </div>
+
+        <h3 id="liveScore" style="color: black;">Smile Score: 0</h3>
+
+        <button class="shutter" onclick="capturePhoto()">📸</button>
+
+        <button id="downloadBtn" class="download" style="display:none;">
+            Download
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!-- Load particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#ffffff", "#ff69b4", "#87cefa", "#dda0dd"] }, /* pastel sparkles */
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.7, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": false },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "random": true,
+                    "out_mode": "out"
+                }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" }
+                },
+                "modes": {
+                    "repulse": { "distance": 100 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>

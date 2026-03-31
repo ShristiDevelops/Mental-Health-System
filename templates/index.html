@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Mental Health System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            z-index: 2;
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        .top-btn {
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .top-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+
+        .welcome-text {
+            margin-bottom: 25px;
+            font-size: 16px;
+            opacity: 0.9;
+            z-index: 1;
+        }
+
+        .home-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1;
+        }
+
+        .big-box {
+            display: inline-block;
+            padding: 15px 30px;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+
+        .big-box:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <img src="{{ url_for('static', filename='logo.png') }}" 
+         alt="Logo" 
+         class="logo">
+
+    <!-- 🔥 Dynamic Buttons -->
+    <div class="top-buttons">
+        {% if username %}
+            <a href="/logout" class="top-btn">Logout</a>
+        {% else %}
+            <a href="/login" class="top-btn">Login</a>
+            <a href="/signup" class="top-btn">Signup</a>
+        {% endif %}
+    </div>
+
+    <h1>AI Mental Health System</h1>
+
+    <!-- 🔥 Premium Personal Touch -->
+    {% if username %}
+        <div class="welcome-text">
+            Welcome, {{ username }} 👋 <br>
+            Your AI-powered emotional companion that understands you over time.
+        </div>
+    {% else %}
+        <div class="welcome-text">
+            Sign in to access your personalized mental wellness assistant.
+        </div>
+    {% endif %}
+
+    <!-- 🔥 Show Features Only If Logged In -->
+    {% if username %}
+    <div class="home-container">
+        <a href="/chatbot" class="big-box">🤖 AI Mental Health Chatbot</a>
+        <a href="/smile" class="big-box">😊 Smile Score Camera</a>
+        <a href="/journal" class="big-box">📔 Journal</a>
+    </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": { "enable": true, "value_area": 800 }
+                },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.7, "random": true },
+                "size": { "value": 4, "random": true },
+                "line_linked": { "enable": false },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "random": true,
+                    "out_mode": "out"
+                }
+            },
+            "interactivity": {
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" }
+                },
+                "modes": {
+                    "repulse": { "distance": 100 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>

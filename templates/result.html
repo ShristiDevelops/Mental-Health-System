@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smile Result 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="
+    margin:0;
+    background:url('{{ url_for('static', filename='smile.png') }}');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial;
+">
+
+<div style="width:360px; text-align:center;">
+
+    <div style="
+        position:relative;
+        display:inline-block;
+        width:300px;
+    ">
+
+        <!-- User Photo -->
+        <img src="{{ url_for('static', filename='result.png') }}"
+             style="
+                width:100%;
+                border-radius:20px;
+                border:6px solid white;
+             ">
+
+        <!-- Sticker -->
+        <img src="{{ url_for('static', filename='filter.png') }}"
+             style="
+                position:absolute;
+                top:0;
+                left:0;
+                width:100%;
+                pointer-events:none;
+                z-index:1;
+             ">
+
+        <!-- Back to Camera (TOP LEFT) -->
+        <a href="/smile"
+           style="
+                position:absolute;
+                top:10px;
+                left:10px;
+                background:black;
+                color:white;
+                padding:6px 10px;
+                border-radius:12px;
+                font-size:12px;
+                text-decoration:none;
+                z-index:3;
+           ">
+            ← Back
+        </a>
+
+        <!-- Smile Score (Below Back Button) -->
+        <div style="
+            position:absolute;
+            top:45px;
+            left:10px;
+            background:hotpink;
+            color:white;
+            padding:6px 10px;
+            border-radius:12px;
+            font-size:13px;
+            font-weight:bold;
+            z-index:3;
+        ">
+            Smile Score: {{ score }}
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
